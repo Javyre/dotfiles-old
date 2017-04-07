@@ -1,0 +1,3 @@
+[submodule "xfce4-terminal/base16-xfce4-terminal"]
+	path = xfce4-terminal/base16-xfce4-terminal
+	url = https://github.com/afg984/base16-xfce4-terminal
