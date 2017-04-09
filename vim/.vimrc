@@ -146,6 +146,11 @@ map <C-l> <Plug>(easymotion-lineforward)
 " ---- Plugins ---- {{{1
 " Vim-Plug {{{2
 let g:plug_window = 'botright 13 new'
+" auto-install plugins
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
 
 " Easymotion {{{2
 let g:EasyMotion_smartcase = 1
@@ -182,8 +187,9 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " vim-airline {{{2
-let g:airline_theme='base16'
+let g:airline_theme='jellybeans'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 
 " Base16 {{{2
 "     If base16-shell exists, vim will activate the
