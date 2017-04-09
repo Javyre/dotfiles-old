@@ -10,6 +10,8 @@ Plug 'chriskempson/tomorrow-theme'
 Plug 'scrooloose/nerdtree'
 Plug 'Shougo/denite.nvim'
 Plug 'easymotion/vim-easymotion'
+Plug 'Raimondi/delimitMate'
+Plug 'terryma/vim-expand-region'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'hecal3/vim-leader-guide'
@@ -45,10 +47,16 @@ set hlsearch " highlight search
 
 
 " ---- Keybinds
+" -- Misc --
 set mouse=a
 let mapleader="\<space>"
+" clear search highlight
+noremap <Leader>sc :noh<CR>
 
-" -- Windows -- 
+" -- Quit --
+noremap <Leader>qq :wqall<CR>
+
+" -- Windows --
 " move around windows
 noremap <Leader>wh <C-w>h
 noremap <Leader>wj <C-w>j
@@ -79,26 +87,49 @@ noremap <Leader>fs :w<CR>
 noremap <Leader>ff :DeniteBufferDir -winheight=13 file_rec<CR>
 noremap <Leader>pf :DeniteProjectDir -winheight=13 file_rec<CR>
 
+" -- Selection --
+map <Leader>v <Plug>(expand_region_expand)
+map <Leader>V <Plug>(expand_region_shrink)
+
 " -- Navigation --
-" <Leader>jj{char} to move to {char}
+" override search
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+" <Leader>jj{char} to jump to {char}
 map  <Leader>jj <Plug>(easymotion-bd-f)
 nmap <Leader>jj <Plug>(easymotion-overwin-f)
 
-" <Leader>jJ{char} to move to {char}
+" <Leader>jJ{char} to jump to {char}
 map  <Leader>jJ <Plug>(easymotion-bd-f2)
 nmap <Leader>jJ <Plug>(easymotion-overwin-f2)
 
-" Move to line
+" Jump to line
 map <Leader>jl  <Plug>(easymotion-bd-jk)
 nmap <Leader>jl <Plug>(easymotion-overwin-line)
 
-" Move to word
+" Jump to word
 map  <Leader>jw <Plug>(easymotion-bd-w)
 nmap <Leader>jw <Plug>(easymotion-overwin-w)
 
-" ---- Plugins
-" Denite
+" Repeat last jump motion
+map <Leader>j. <Plug>(easymotion-repeat)
 
+" HJKL motions: Line motions
+map <Leader>Jj <Plug>(easymotion-j)
+map <Leader>Jk <Plug>(easymotion-k)
+map <Leader>Jl <Plug>(easymotion-lineforward)
+map <Leader>Jh <Plug>(easymotion-linebackward)
+
+
+" ---- Plugins
+" Easymotion
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Denite
 " Change mappings.
 call denite#custom#map(
       \ 'insert',
@@ -133,7 +164,7 @@ let g:airline_theme='base16'
 let g:airline_powerline_fonts = 1
 
 " Base16
-"     If base16-shell exists, vim will activate the 
+"     If base16-shell exists, vim will activate the
 "     right theme to match the base16-shell theme
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
@@ -147,17 +178,17 @@ endif
 
 
 " set runtimepath+=~/.vim_runtime
-" 
+"
 " source ~/.vim_runtime/vimrcs/basic.vim
 " source ~/.vim_runtime/vimrcs/filetypes.vim
 " source ~/.vim_runtime/vimrcs/plugins_config.vim
 " source ~/.vim_runtime/vimrcs/extended.vim
-" 
+"
 " try
 " source ~/.vim_runtime/my_configs.vim
 " catch
 " endtry
-" 
+"
 " set number
 
 
