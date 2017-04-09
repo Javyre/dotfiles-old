@@ -1,4 +1,4 @@
-" ---- VimPLug ----
+" ---- VimPLug ---- {{{
 call plug#begin('~/.vim/plugged')
 
 " ColorSchemes
@@ -14,27 +14,24 @@ Plug 'Raimondi/delimitMate'
 Plug 'terryma/vim-expand-region'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'hecal3/vim-leader-guide'
 
 " Lang
 Plug 'vim-syntastic/syntastic'
 
 call plug#end()
-" ---- End VimPlug ----
+" ---- End VimPlug ---- }}}
 
-
-
-
-" ---- Colors
+" ---- Colors {{{1
 filetype plugin on
 colorscheme molokai
 syntax on
 highlight Normal ctermbg=None
 highlight nonText ctermbg=None
 
-" ---- Interface
+" ---- Interface {{{1
 set relativenumber
 filetype indent on
+set softtabstop=2
 set lazyredraw
 set laststatus=2 " make airline appear when no split
 
@@ -42,21 +39,30 @@ set showmatch " highlight matching bracket
 set incsearch " search while typing
 set hlsearch " highlight search
 
+" ---- Functionality {{{1
+" make vim save and load the folding of the document each time it loads
+" also places the cursor in the last place that it was left.
+au BufWinLeave * :silent! mkview
+au BufWinEnter * :silent! loadview
+set modeline
 
+" }}}1
 
-
-
-" ---- Keybinds
-" -- Misc --
+" ---- Keybinds ---- {{{1
+" -- Misc -- {{{2
 set mouse=a
 let mapleader="\<space>"
 " clear search highlight
 noremap <Leader>sc :noh<CR>
+" increment and decrement
+noremap <Leader>+ <C-a>
+noremap <Leader>= <C-a>
+noremap <Leader>- <C-x>
 
-" -- Quit --
+" -- Quit -- {{{2
 noremap <Leader>qq :wqall<CR>
 
-" -- Windows --
+" -- Windows -- {{{2
 " move around windows
 noremap <Leader>wh <C-w>h
 noremap <Leader>wj <C-w>j
@@ -70,28 +76,28 @@ noremap <Leader>w/ :vsp<CR>
 " maximize window (closes all other windows but focused one)
 noremap <Leader>wm <C-w>o
 
-" -- Buffers --
+" -- Buffers -- {{{2
 " close buffer
 noremap <Leader>bd :bd<CR>
 " noremap <Leader>bb :CtrlPBuffer<CR>
 noremap <Leader>bb :Denite -winheight=13 buffer<CR>
 
-" -- Tabs --
+" -- Tabs -- {{{2
 " Go to last active tab
 let g:lasttab = 1
 au TabLeave * let g:lasttab = tabpagenr()
 noremap <silent> <Leader><tab> :exe "tabn ".g:lasttab<cr>
 
-" -- Files --
+" -- Files -- {{{2
 noremap <Leader>fs :w<CR>
 noremap <Leader>ff :DeniteBufferDir -winheight=13 file_rec<CR>
 noremap <Leader>pf :DeniteProjectDir -winheight=13 file_rec<CR>
 
-" -- Selection --
+" -- Selection -- {{{2
 map <Leader>v <Plug>(expand_region_expand)
 map <Leader>V <Plug>(expand_region_shrink)
 
-" -- Navigation --
+" -- Navigation -- {{{2
 " override search
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
@@ -120,16 +126,25 @@ map <Leader>j. <Plug>(easymotion-repeat)
 " HJKL motions: Line motions
 map <Leader>Jj <Plug>(easymotion-j)
 map <Leader>Jk <Plug>(easymotion-k)
-map <Leader>Jl <Plug>(easymotion-lineforward)
 map <Leader>Jh <Plug>(easymotion-linebackward)
+map <Leader>Jl <Plug>(easymotion-lineforward)
 
+map <C-j> <Plug>(easymotion-j)
+map <C-k> <Plug>(easymotion-k)
+map <C-h> <Plug>(easymotion-linebackward)
+map <C-l> <Plug>(easymotion-lineforward)
+" }}}
+" }}}
 
-" ---- Plugins
-" Easymotion
+" ---- Plugins ---- {{{1
+" Vim-Plug {{{2
+let g:plug_window = 'botright 13 new'
+
+" Easymotion {{{2
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
-" Denite
+" Denite {{{2
 " Change mappings.
 call denite#custom#map(
       \ 'insert',
@@ -149,7 +164,7 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ [ '.git/', '__pycache__/', 'venv/', '*.min.*', '*.pyc'])
 
 
-" Syntastic
+" Syntastic {{{2
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -159,11 +174,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" vim-airline
+" vim-airline {{{2
 let g:airline_theme='base16'
 let g:airline_powerline_fonts = 1
 
-" Base16
+" Base16 {{{2
 "     If base16-shell exists, vim will activate the
 "     right theme to match the base16-shell theme
 if filereadable(expand("~/.vimrc_background"))
@@ -173,22 +188,7 @@ if filereadable(expand("~/.vimrc_background"))
   highlight nonText ctermbg=None
 endif
 
+" }}}
+" }}}
 
-
-
-
-" set runtimepath+=~/.vim_runtime
-"
-" source ~/.vim_runtime/vimrcs/basic.vim
-" source ~/.vim_runtime/vimrcs/filetypes.vim
-" source ~/.vim_runtime/vimrcs/plugins_config.vim
-" source ~/.vim_runtime/vimrcs/extended.vim
-"
-" try
-" source ~/.vim_runtime/my_configs.vim
-" catch
-" endtry
-"
-" set number
-
-
+" vim:foldmethod=marker:foldlevel=0
