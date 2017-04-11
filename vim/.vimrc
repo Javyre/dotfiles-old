@@ -17,13 +17,17 @@ Plug 'chriskempson/tomorrow-theme'
 Plug 'scrooloose/nerdtree'
 Plug 'Shougo/denite.nvim'
 Plug 'easymotion/vim-easymotion'
-Plug 'Raimondi/delimitMate'
-Plug 'terryma/vim-expand-region'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Editing
+Plug 'Raimondi/delimitMate'
+Plug 'terryma/vim-expand-region'
+Plug 'junegunn/vim-easy-align'
+
 " Lang
-Plug 'vim-syntastic/syntastic'
+" Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
 
 call plug#end()
 " ---- End VimPlug ---- }}}
@@ -37,6 +41,7 @@ highlight nonText ctermbg=None
 
 " ---- Interface {{{1
 set relativenumber
+set number
 filetype indent on
 set softtabstop=2
 set lazyredraw
@@ -56,6 +61,23 @@ set modeline
 " }}}1
 
 " ---- Keybinds ---- {{{1
+" -- Toggles -- {{{2
+function! ToggleRelative()
+  if &relativenumber
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunction
+function! ToggleNumber()
+  if &number
+    set nonumber
+  else
+    set number
+  endif
+endfunction
+map <Leader>tr :call ToggleRelative()<CR>
+map <Leader>tn :call ToggleNumber()<CR>
 " -- Misc -- {{{2
 set mouse=a
 let mapleader="\<space>"
@@ -140,6 +162,9 @@ map <C-j> <Plug>(easymotion-j)
 map <C-k> <Plug>(easymotion-k)
 map <C-h> <Plug>(easymotion-linebackward)
 map <C-l> <Plug>(easymotion-lineforward)
+" -- Editing -- {{{2
+xmap <Leader>ea <Plug>(EasyAlign)
+nmap <Leader>ea <Plug>(EasyAlign)
 " }}}
 " }}}
 
@@ -177,15 +202,26 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
 
 
 " Syntastic {{{2
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+"
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+
+" A.L.E.{{{2
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%{ALEGetStatusLine()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 
+let g:ale_python_flake8_executable = 'python3'
+let g:ale_python_flake8_args = '-m flake8'
+
+let g:ale_python_pylint_executable = 'python3'
 " vim-airline {{{2
 let g:airline_theme='jellybeans'
 let g:airline_powerline_fonts = 1
