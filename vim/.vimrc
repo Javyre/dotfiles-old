@@ -79,6 +79,18 @@ noremap <Leader>- <C-x>
 " -- Toggles -- {{{2
 noremap <Leader>tr :call ToggleRelative()<CR>
 noremap <Leader>tn :call ToggleNumber()<CR>
+noremap <Leader>t- :call ToggleCenteredPoint()<CR>
+
+function! ToggleCenteredPoint()
+  if &scrolloff != 99999
+    let w:old_scrolloff = &scrolloff
+    set scrolloff=99999
+    echo 'Centered Point: on'
+  else
+    let &scrolloff = w:old_scrolloff
+    echo 'Centered Point: off'
+  endif
+endfunction
 
 function! ToggleRelative()
   if &relativenumber
@@ -279,4 +291,4 @@ highlight nonText    ctermbg=None
 highlight SignColumn ctermbg=None
 highlight LineNr     ctermbg=None
 
-" vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:filetype=vim
