@@ -21,6 +21,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Editing
+Plug 'tpope/vim-commentary'
 Plug 'Raimondi/delimitMate'
 Plug 'terryma/vim-expand-region'
 Plug 'junegunn/vim-easy-align'
@@ -28,6 +29,7 @@ Plug 'junegunn/vim-easy-align'
 " Lang
 " Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
+Plug 'Valloric/YouCompleteMe', {'do': './intall.py --all'}
 
 call plug#end()
 " ---- End VimPlug ---- }}}
@@ -36,8 +38,6 @@ call plug#end()
 filetype plugin on
 colorscheme molokai
 syntax on
-highlight Normal ctermbg=None
-highlight nonText ctermbg=None
 
 " ---- Interface {{{1
 set relativenumber
@@ -46,6 +46,9 @@ filetype indent on
 set softtabstop=2
 set lazyredraw
 set laststatus=2 " make airline appear when no split
+
+set scrolloff=3
+set sidescrolloff=5
 
 set showmatch " highlight matching bracket
 set incsearch " search while typing
@@ -57,27 +60,12 @@ set hlsearch " highlight search
 au BufWinLeave * :silent! mkview
 au BufWinEnter * :silent! loadview
 set modeline
+set history=1000
+set encoding=utf-8
 
 " }}}1
 
 " ---- Keybinds ---- {{{1
-" -- Toggles -- {{{2
-function! ToggleRelative()
-  if &relativenumber
-    set norelativenumber
-  else
-    set relativenumber
-  endif
-endfunction
-function! ToggleNumber()
-  if &number
-    set nonumber
-  else
-    set number
-  endif
-endfunction
-map <Leader>tr :call ToggleRelative()<CR>
-map <Leader>tn :call ToggleNumber()<CR>
 " -- Misc -- {{{2
 set mouse=a
 let mapleader="\<space>"
@@ -87,6 +75,26 @@ noremap <Leader>sc :noh<CR>
 noremap <Leader>+ <C-a>
 noremap <Leader>= <C-a>
 noremap <Leader>- <C-x>
+
+" -- Toggles -- {{{2
+noremap <Leader>tr :call ToggleRelative()<CR>
+noremap <Leader>tn :call ToggleNumber()<CR>
+
+function! ToggleRelative()
+  if &relativenumber
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunction
+
+function! ToggleNumber()
+  if &number
+    set nonumber
+  else
+    set number
+  endif
+endfunction
 
 " -- Quit -- {{{2
 noremap <Leader>qq :wqall<CR>
@@ -110,16 +118,17 @@ noremap <Leader>wm <C-w>o
 noremap <Leader>bd :bd<CR>
 " noremap <Leader>bb :CtrlPBuffer<CR>
 noremap <Leader>bb :Denite -winheight=13 buffer<CR>
-
+noremap <silent> <Leader><tab> <C-^>
 " -- Tabs -- {{{2
 " Go to last active tab
 let g:lasttab = 1
 au TabLeave * let g:lasttab = tabpagenr()
-noremap <silent> <Leader><tab> :exe "tabn ".g:lasttab<cr>
+noremap <silent> <Leader>t<tab> :exe "tabn ".g:lasttab<cr>
 
 " -- Files -- {{{2
 noremap <Leader>fs :w<CR>
 noremap <Leader>ff :DeniteBufferDir -winheight=13 file_rec<CR>
+noremap <Leader>fF :e<space>
 noremap <Leader>pf :DeniteProjectDir -winheight=13 file_rec<CR>
 
 " -- Selection -- {{{2
@@ -212,16 +221,41 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
 " let g:syntastic_check_on_wq = 0
 
 " A.L.E.{{{2
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = '>'
+let g:ale_sign_warning = '-'
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+
+let g:ale_python_mypy_options = '--python-version 3.6'
+let g:ale_python_flake8_executable = 'python3'
+let g:ale_python_flake8_args = '-m flake8'
+let g:ale_python_pylint_executable = 'python3'
+
 set statusline+=%#warningmsg#
 set statusline+=%{ALEGetStatusLine()}
 set statusline+=%*
 
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+" Y.C.M.{{{2
+let g:ycm_server_python_interpreter = 'python3'
+let g:ycm_python_binary_path = 'python3'
 
-let g:ale_python_flake8_executable = 'python3'
-let g:ale_python_flake8_args = '-m flake8'
+let g:ycm_filepath_completion_use_working_dir = 1
+let g:ycm_key_list_select_completion = ['<TAB>', '<Down>', '<C-j>']
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>', '<C-k>']
+let g:ycm_semantic_triggers =  {
+  \   'c' : ['->', '.'],
+  \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+  \             're!\[.*\]\s'],
+  \   'ocaml' : ['.', '#'],
+  \   'cpp,objcpp' : ['->', '.', '::'],
+  \   'perl' : ['->'],
+  \   'php' : ['->', '::'],
+  \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+  \   'ruby' : ['.', '::'],
+  \   'lua' : ['.', ':'],
+  \   'erlang' : [':'],
+  \ }
 
-let g:ale_python_pylint_executable = 'python3'
 " vim-airline {{{2
 let g:airline_theme='jellybeans'
 let g:airline_powerline_fonts = 1
@@ -239,5 +273,10 @@ endif
 
 " }}}
 " }}}
+
+highlight Normal     ctermbg=None
+highlight nonText    ctermbg=None
+highlight SignColumn ctermbg=None
+highlight LineNr     ctermbg=None
 
 " vim:foldmethod=marker:foldlevel=0
