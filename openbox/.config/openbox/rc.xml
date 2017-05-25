@@ -653,16 +653,16 @@
       </mousebind>
     </context>
     <context name="Desktop">
-      <mousebind button="Up" action="Click">
-        <action name="GoToDesktop">
-          <to>previous</to>
-        </action>
-      </mousebind>
-      <mousebind button="Down" action="Click">
-        <action name="GoToDesktop">
-          <to>next</to>
-        </action>
-      </mousebind>
+      <!-- <mousebind button="Up" action="Click"> -->
+      <!--   <action name="GoToDesktop"> -->
+      <!--     <to>previous</to> -->
+      <!--   </action> -->
+      <!-- </mousebind> -->
+      <!-- <mousebind button="Down" action="Click"> -->
+      <!--   <action name="GoToDesktop"> -->
+      <!--     <to>next</to> -->
+      <!--   </action> -->
+      <!-- </mousebind> -->
       <mousebind button="A-Up" action="Click">
         <action name="GoToDesktop">
           <to>previous</to>
@@ -782,7 +782,7 @@
   # order that they appear in this list
 
 
-    # each rule element can be left out or set to 'default' to specify to not 
+    # each rule element can be left out or set to 'default' to specify to not
     # change that attribute of the window
 
     <decor>yes</decor>
