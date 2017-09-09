@@ -252,19 +252,24 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-set $bg-color 	         #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
+# set $bg-color 	         #2f343f
+set $bg-color 	         #151515
+# set $inactive-bg-color   #2f343f
+set $inactive-bg-color   #262626
+# set $text-color          #f3f4f5
+set $text-color          #d8dee9
 set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
+# set $urgent-bg-color     #E53935
+set $urgent-bg-color     #870000
 
 # window colors
 #                       border              background         text                 indicator
-# client.focused          $bg-color           $bg-color          $text-color          #00ff00
-client.focused          #B2FFA9             $bg-color          $text-color          #B2FFA9
-client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #B2FFA9
-client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #B2FFA9
-client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #B2FFA9
+client.focused          $bg-color           $bg-color          $text-color          #0d61ac
+# client.focused          #B2FFA9             $bg-color          $text-color          #B2FFA9
+# client.focused          #B2FFA9             $bg-color          $text-color          #B2FFA9
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #0c509b
+client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #0c509b
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #0c509b
 # The side buttons move the window around
 # bindsym --whole-window $mod+button9 move left
 # bindsym --whole-window $mod+button8 move right
