@@ -12,8 +12,8 @@ bz_color="#151515"
 ac_color="#0d61ac"
 ur_color="#870000"
 
-rslant=""
-lslant=""
+rslant=""
+lslant=""
 
 lvl0="%{B$bz_color}%{F$bg_color}"
 lvl1="%{B$bg_color}%{F$fg_color}"
@@ -67,11 +67,12 @@ i3ws_common="\
 lemonbar_common=$(
 echo "\
 -u 2 -a 20 -b \
--o '0' -f 'Noto Sans-12' \
+-o '0' -f 'Noto Sans for Slantline-12' \
 -o '-1' -f 'Monaco for Powerline for Slantline-13' \
 -o '-1' -f 'FontAwesome-12' \
 "
 )
+# -o '0' -f 'Noto Sans-12' \
 
 
 {
@@ -108,7 +109,7 @@ trans 1 to 0
 echo -n "%{r}"
 
 trans 0 to 1 l
-echo -n " <<clock '+%a, %d %b %H:%M'>> "
+echo -n " <<clock '+%a, %d %b %I:%M'>> "
 trans 1 to 2 l
 echo -n "   <<vol -j -o -s -c PRIVATE>> "
 
@@ -138,7 +139,7 @@ echo -n "%{c}"
 echo -n "%{r}"
 
 trans 0 to 1 l
-echo -n " <<clock '+%a, %d %b %H:%M'>> "
+echo -n " <<clock '+%a, %d %b %I:%M'>> "
 
 echo -n "$lvl0"
 

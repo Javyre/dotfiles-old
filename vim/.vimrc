@@ -38,6 +38,9 @@ Plug 'wellle/targets.vim'
 Plug 'tweekmonster/braceless.vim'
 
 " Lang
+" Plug 'Valloric/YouCompleteMe', {'do': './intall.py --all'}
+Plug 'udalov/kotlin-vim'
+Plug 'sheerun/vim-polyglot'
 Plug 'majutsushi/tagbar'
 Plug 'w0rp/ale'
 Plug 'davidhalter/jedi-vim'
@@ -46,10 +49,15 @@ if has('nvim')
 else
     Plug 'Shougo/neocomplete.vim'
 endif
-" Plug 'Valloric/YouCompleteMe', {'do': './intall.py --all'}
 Plug 'vim-python/python-syntax'
 Plug 'vim-scripts/indentpython.vim'
+" Plug 'Rip-Rip/clang_complete'
+Plug 'tweekmonster/deoplete-clang2'
+Plug 'kovetskiy/sxhkd-vim'
 
+" Misc
+Plug 'edkolev/tmuxline.vim'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 " ---- End VimPlug ---- }}}
@@ -58,6 +66,12 @@ call plug#end()
 filetype plugin on
 colorscheme molokai
 syntax on
+" if has('patch-7.4.1778')
+"   set guicolors
+" endif
+if has('nvim')
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 
 " ---- Interface {{{1
 set relativenumber
@@ -94,7 +108,8 @@ au BufWinEnter * :silent! loadview
 set modeline
 set history=1000
 set encoding=utf-8
-set foldmethod=syntax
+set foldmethod=marker
+set clipboard+=unnamedplus
 
 " autoformatting in python
 au FileType python setlocal formatprg=autopep8\ -
@@ -114,8 +129,10 @@ noremap <Leader>= <C-a>
 noremap <Leader>- <C-x>
 
 " exit insert and visual mode instantly
-inoremap <ESC> <ESC>jk
-vnoremap <ESC> <ESC>jk
+if !has('nvim')
+    inoremap <ESC> <ESC>jk
+    vnoremap <ESC> <ESC>jk
+endif
 
 " yankround
 nmap p <Plug>(yankround-p)
@@ -394,6 +411,10 @@ let g:deoplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
 let g:neocomplete#sources#syntax#min_keyword_length = 3
 
+" Set clang stuff
+let g:deoplete#sources#clang#executable = '/usr/bin/clang'
+
+
 inoremap <expr><C-j> pumvisible()? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k> pumvisible()?  "\<C-p>" : "\<C-k>"
 
@@ -435,25 +456,25 @@ if !has('nvim')
     \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
     " alternative pattern: '\h\w*\|[^. \t]\.\w*'
 else
-	" <C-h>, <BS>: close popup and delete backword char.
-	inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
 
-	" <CR>: close popup and save indent.
-	inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-	function! s:my_cr_function() abort
-	  return deoplete#close_popup() . "\<CR>"
-	endfunction
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+        return deoplete#close_popup() . "\<CR>"
+    endfunction
 
 
-	inoremap <silent><expr> <TAB>
+    inoremap <silent><expr> <TAB>
                 \ pumvisible() ? "\<C-n>" :
                 \ <SID>check_back_space() ? "\<TAB>" :
                 \ deoplete#mappings#manual_complete()
-	function! s:check_back_space() abort "{{{
+    function! s:check_back_space() abort "{{{
         let col = col('.') - 1
         return !col || getline('.')[col - 1]  =~ '\s'
-	endfunction "}}}
+    endfunction "}}}
 endif
 " Y.C.M.{{{2
 " let g:ycm_server_python_interpreter = 'python3'
@@ -518,7 +539,20 @@ let g:airline_section_x = '%{PencilMode()}'
 let g:formatdef_autopep8 = '"autopep8 -".(g:DoesRangeEqualBuffer(a:firstline, a:lastline) ? " --range ".a:firstline." ".a:lastline : "")." ".(&textwidth ? "--max-line-length=".&textwidth : ""). " --ignore E225,E226,E24,W503"'
 " Braceless {{{2
 autocmd FileType python BracelessEnable +indent
+" Tmuxline {{{2
+let g:tmuxline_preset = {
+    \'a'    : '#S',
+    \'b'    : '#W',
+    \'c'    : ['#(whoami)', '#(uptime | cud -d " " -f 1,2,3)'],
+    \'win'  : ['#I', '#W'],
+    \'cwin' : ['#I', '#W'],
+    \'x'    : '%a',
+    \'y'    : '%I:%M',
+    \'z'    : '#H'}
 " }}}
+" clang_complete {{{2
+let g:clang_library_path='/usr/lib/libclang.so'
+
 " }}}
 
 " hi Statement ctermfg=1
