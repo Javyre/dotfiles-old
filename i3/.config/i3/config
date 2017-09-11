@@ -336,6 +336,9 @@ mode "$mode_mpc" {
     bindsym h       exec --no-startup-id mpc prev;
     bindsym l       exec --no-startup-id mpc next;
 
+    bindsym j       exec --no-startup-id jmctl vom PRIVATE -5
+    bindsym k       exec --no-startup-id jmctl vom PRIVATE +5
+
     bindsym z       exec --no-startup-id mpc random;
     bindsym c       exec --no-startup-id mpc consume;
 
