@@ -48,6 +48,7 @@ trans() {
     echo -n "$ret"
 }
 
+cmd="lemonbar"
 
 sep="        "
 
@@ -72,6 +73,10 @@ echo "\
 -o '-1' -f 'FontAwesome-12' \
 "
 )
+
+screen1_args="$lemonbar_common $screen1"
+screen2_args="$lemonbar_common $screen2"
+
 # -o '0' -f 'Noto Sans-12' \
 
 
@@ -117,7 +122,7 @@ echo -n "$lvl0"
 
 # Requires a patched lemonbar for xft support
 } | genbar -b '<<' -e '>>' | \
-    eval lemonbar $lemonbar_common "$screen1" | sh &> /dev/null &
+    eval $cmd "$screen1_args" | sh &> /dev/null &
 
 {
 echo -n "$lvl0"
@@ -145,6 +150,6 @@ echo -n "$lvl0"
 
 # Requires a patched lemonbar for xft support
 } | genbar -b '<<' -e '>>' | \
-    eval lemonbar $lemonbar_common "$screen2" | sh &> /dev/null &
+    eval $cmd "$screen2_args" | sh &> /dev/null &
 
 wait

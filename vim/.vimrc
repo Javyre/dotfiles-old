@@ -18,6 +18,7 @@ Plug 'LeafCage/yankround.vim'
 Plug 'thaerkh/vim-workspace'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'pelodelfuego/vim-swoop'
 Plug 'lucidstack/ctrlp-mpc.vim'
 Plug 'lokikl/vim-ctrlp-ag'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -58,6 +59,7 @@ Plug 'kovetskiy/sxhkd-vim'
 " Misc
 Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 call plug#end()
 " ---- End VimPlug ---- }}}
@@ -114,6 +116,8 @@ set clipboard+=unnamedplus
 " autoformatting in python
 au FileType python setlocal formatprg=autopep8\ -
 au FileType python setlocal fo=cqa
+
+au FileType asm setl noexpandtab
 
 " }}}1
 
@@ -249,6 +253,14 @@ omap / <Plug>(easymotion-tn)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
 
+" swoop
+nmap <Leader>sS :call Swoop()<CR>
+vmap <Leader>sS :call SwoopSelection()<CR>
+
+" swoop multibuffer
+nmap <Leader>ss :call SwoopMulti()<CR>
+vmap <Leader>ss :call SwoopMultiSelection()<CR>
+
 " <Leader>jj{char} to jump to {char}
 map  <Leader>jj <Plug>(easymotion-bd-f)
 nmap <Leader>jj <Plug>(easymotion-overwin-f)
@@ -279,7 +291,7 @@ map <C-k> <Plug>(easymotion-k)
 map <C-h> <Plug>(easymotion-linebackward)
 map <C-l> <Plug>(easymotion-lineforward)
 " -- Editing -- {{{2
-au FileType python inoremap {<CR> {<CR>}<Esc>O
+" au FileType python inoremap {<CR> {<CR>}<Esc>O
 
 xmap <Leader>ea <Plug>(EasyAlign)
 nmap <Leader>ea <Plug>(EasyAlign)
@@ -343,16 +355,24 @@ let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " CtrlP {{{2
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_brief_prompt = 1
-let g:ctrlp_user_command = 'ag %s
-    \ $((hg root || git rev-parse --show-toplevel || pwd) 2> /dev/null)
-    \ -i --nocolor --nogroup --hidden
-    \ --ignore .git
-    \ --ignore .svn
-    \ --ignore .hg
-    \ --ignore .DS_Store
-    \ --ignore "**/*.pyc"
-    \ -g ""'
+"let g:ctrlp_brief_prompt = 1
+if executable('rg')
+    let g:ctrlp_user_command = 'rg %s --files --hidden --color never -g "!.git/*"'
+elseif executable('ag')
+    let g:ctrlp_user_command = 'ag %s -g "" --hidden --nocolor
+                        \ --ignore ".git"'
+elseif executable('find')
+    let g:ctrlp_user_command = 'find %s'
+endif
+" let g:ctrlp_user_command = 'ag %s
+"     \ $((hg root || git rev-parse --show-toplevel || pwd) 2> /dev/null)
+"     \ -i --nocolor --nogroup --hidden
+"     \ --ignore .git
+"     \ --ignore .svn
+"     \ --ignore .hg
+"     \ --ignore .DS_Store
+"     \ --ignore "**/*.pyc"
+"     \ -g ""'
 " Syntastic {{{2
 " set statusline+=%#warningmsg#
 " set statusline+=%{SyntasticStatuslineFlag()}
@@ -554,6 +574,24 @@ let g:tmuxline_preset = {
 let g:clang_library_path='/usr/lib/libclang.so'
 
 " }}}
+" DelimitMate {{{2
+
+let g:delimitMate_expand_cr = 2
+
+" }}}
+" Swoop {{{2
+
+let g:swoopUseDefaultKeyMap = 0
+
+" }}}
+" Git Gutter {{{2
+let g:gitgutter_override_sign_column_highlight = 0
+highlight SignColumn      ctermbg=None
+highlight GitGutterAdd    ctermbg=None
+highlight GitGutterChange ctermbg=None
+highlight GitGutterDelete ctermbg=None
+
+" }}}
 
 " hi Statement ctermfg=1
 " hi function ctermfg=6
@@ -565,5 +603,10 @@ highlight Normal     ctermbg=None
 highlight nonText    ctermbg=None
 highlight SignColumn ctermbg=None
 highlight LineNr     ctermbg=None
+
+let g:airline_left_sep=""
+let g:airline_right_sep=""
+
+
 
 " vim:foldmethod=marker:filetype=vim

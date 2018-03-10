@@ -33,7 +33,9 @@ floating_modifier $mod
 #bindsym $mod+Return exec i3-sensible-terminal
 #bindsym $mod+Return exec termite
 # bindsym $mod+Return exec urxvt -depth 32 -e /bin/zsh
-bindsym $mod+Return exec xfce4-terminal
+
+# bindsym $mod+Return exec xfce4-terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -252,7 +254,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# set $bg-color 	         #2f343f
+# set $bg-color 	         #3f343f
 set $bg-color 	         #151515
 # set $inactive-bg-color   #2f343f
 set $inactive-bg-color   #262626
@@ -330,6 +332,7 @@ bindsym $mod+p mode "$mode_mpc"
 mode "$mode_mpc" {
     # set $mode_mpc  echo test;
 
+
     bindsym p       exec --no-startup-id mpc toggle; mode "default"
     bindsym space   exec --no-startup-id mpc toggle; mode "default"
 
@@ -343,6 +346,8 @@ mode "$mode_mpc" {
     bindsym c       exec --no-startup-id mpc consume;
 
     bindsym m       exec --no-startup-id moap &; mode "deafault"
+
+    bindsym 0       exec --no-startup-id jmctl tc PubMPD PUBLIC; mode "default"
 
     bindsym q       mode "default"
     bindsym Return  mode "default"
